@@ -52,32 +52,10 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
-            // Remove typing indicator
-            chatMessages.removeChild(typingIndicator);
-            
-            // Add bot response to chat
             addMessageToChat(data.response, 'bot-message');
-            
-            // Optionally display more detailed information
-            if (data.intent && data.intent !== 'error') {
-                const detailsElement = document.createElement('div');
-                detailsElement.className = 'message-details';
-                detailsElement.innerHTML = `
-                    <small>
-                        <strong>Intent:</strong> ${data.intent}<br>
-                        ${data.medication_names && data.medication_names.length > 0 ? 
-                          `<strong>Medications:</strong> ${data.medication_names.join(', ')}` : ''}
-                    </small>
-                `;
-                chatMessages.appendChild(detailsElement);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
         })
         .catch(error => {
-            console.error('Error sending message:', error);
-            // Remove typing indicator
-            chatMessages.removeChild(typingIndicator);
-            addMessageToChat('Sorry, there was an error processing your request.', 'bot-message');
+            console.error('Error:', error);
         });
     }
     
