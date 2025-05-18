@@ -34,6 +34,6 @@ services:
     depends_on:
       - fastapi
     command: >
-      sh -c "flask --app agent.demo_code.demo_server run --host=0.0.0.0 --port=8080 --debug"
+      sh -c "flask --app agent.demo_code.demo_server run --host=0.0.0.0 --port=8080 --reload"
     volumes:
       - ./:/app

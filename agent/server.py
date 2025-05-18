@@ -16,6 +16,8 @@ logger.info("Initializing FastAPI application...")
 tracer_provider = register(
     project_name=PROJECT_NAME,
 )
+
+# Template uses OpenAI, but any LLM provider or agentic framework can be plugged in
 OpenAIInstrumentor().instrument(tracer_provider=tracer_provider)
 
 app = FastAPI()
