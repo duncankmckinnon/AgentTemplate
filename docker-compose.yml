@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  phoenix:
+    image: arizephoenix/phoenix:latest
+    ports:
+      - "6006:6006"
+      - "4317:4317"
+
+  fastapi:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - OPENAI_TEMPERATURE=${OPENAI_TEMPERATURE:-0.2}
+      - PHOENIX_COLLECTOR_ENDPOINT=http://phoenix:4317
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - phoenix
+    command: >
+      sh -c "uvicorn agent.server:app --host 0.0.0.0 --port 8000 --reload"
+    volumes:
+      - ./:/app
+
+  demo:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - FASTAPI_URL=http://fastapi:8000
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - fastapi
+    command: >
+      sh -c "flask --app agent.demo_code.demo_server run --host=0.0.0.0 --port=8080 --debug"
+    volumes:
+      - ./:/app

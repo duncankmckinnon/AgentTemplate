@@ -1,0 +1,13 @@
+flask>=2.0.0
+flask-cors>=3.0.0
+python-dateutil>=2.8.2
+python-dotenv>=1.0.0
+arize-phoenix>=0.0.6
+openinference-semantic-conventions>=0.0.1
+openinference-instrumentation-openai>=0.0.1
+openinference-instrumentation>=0.0.1
+opentelemetry-sdk>=1.19.0
+opentelemetry-api>=1.19.0
+pandas<3.0.0
+openai>=0.27.0
+apscheduler>=3.10.0
