@@ -10,13 +10,13 @@ from dotenv import load_dotenv
 from agent.constants import PROJECT_NAME, AGENT_NAME, SPAN_TYPE
 import os
 import logging
-import json
 
 logger = logging.getLogger("agent_demo")
 
 load_dotenv()
 
-def setup_openai():
+def setup_client():
+    # For the template, we're using OpenAI, but you can use any LLM provider or agentic framework
     from openai import OpenAI
     logger.info(f"Setting up OpenAI with endpoint: {os.getenv('OPENAI_MODEL', 'gpt-4o-mini')}")
     return OpenAI(
@@ -28,7 +28,7 @@ tracer = trace.get_tracer(PROJECT_NAME)
 class Agent:
 
     def __init__(self, cache: LRUCache):
-        self.client = setup_openai()
+        self.client = setup_client()
         self.model = os.getenv("OPENAI_MODEL", "gpt-4o")
         self.prompts = Prompts()
         self.cache = cache

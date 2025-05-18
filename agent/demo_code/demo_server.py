@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify, render_template
 import os
 import sys
 import requests
-import time
 import logging
 
 # Configure logging
