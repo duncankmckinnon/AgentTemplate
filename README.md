@@ -78,7 +78,7 @@ Key components:
 
 ### Server
 The server code is in [agent/server.py](https://github.com/duncankmckinnon/AgentTemplate/tree/main/agent/server.py). This contains the python fastAPI interface that processes chat requests. 
-The server is where the open inference tracing is setup for the application, so if you switch the framework from OpenAI to Crew (or another provider), you will need to add appropriate open-inference packages in requirements and change the auto-instrumentation setup in the server.
+The server is where the open-inference tracing is setup for the application. 
 
 ### Agent
 The agent code is in [agent/agent.py](https://github.com/duncankmckinnon/AgentTemplate/tree/main/agent/agent.py). It instantiates the LLM client or agentic framework entrypoint for requests in a setup method, and includes some basic open-telemetry and open-inference boilerplate for capturing information about requests and responses.
@@ -117,4 +117,51 @@ The built in caching logic is in [`agent/caching.py`](https://github.com/duncank
 
 If you need to include additional context in the cache, the caching may need to be augmented to store other useful information separately (so it only needs to be retrieved and persisted one time - e.g. customer profile info).
 
+## Changing Frameworks or LLM providers
+
+If you do need to switch the framework from (e.g. from `OpenAI` to `CrewAI`), you can follow these steps without any other changes: 
+1. Find the appropriate python package for setting up and running the agent or sending request to the llm
+   * `from openai import OpenAI` -> `from crewai import Agents, Crew`
+2. In the [agent](https://github.com/duncankmckinnon/AgentTemplate/tree/main/agent/agent.py) update `setup_client` to include the instantiation of the framework and return the client that executes on requests.
+3. In the function `agent.analyze_request`, update how the client is being called to match the framework's semantic conventions
+   * current implementation with openai:
+   ```python
+      self.client = setup_client() # openai client
+      ...
+      with using_session(session_id):
+        response = (
+          self.client.chat.completions.create(
+            model=self.model,
+            messages=prompt,
+          )
+          .choices[0]
+          .message
+          .content
+        ).strip()
+   ```
+   * other framework - (crewai):
+   ```python
+      self.client = setup_client(prompts, ...) # crewai agent executable
+      ...
+      with using_session(session_id):
+        response = self.client.kickoff(inputs={"request": request}).raw
+   ``` 
+5. Find the appropriate [open-inference](https://github.com/Arize-ai/openinference) package (e.g. `openinference-instrumentation-crewai`)
+6. Update the requirements to use the python package and open-inference auto-instrumenter you're using
+   * `openai` -> `crewai`
+   * `openinference-instrumentation-openai` -> `openinference-instrumentation-crewai`
+7. Change the imports and the single line auto-instrumentation setup (noted in comments) in the [server](https://github.com/duncankmckinnon/AgentTemplate/tree/main/agent/server.py)
+   * `from openinference.instrumentation.openai import OpenAIInstrumentor` -> `from openinference.instrumentation.crewai import CrewAIInstrumentor`
+   * `OpenAIInstrumentor().instrument(tracer_provider)` -> `CrewAIInstrumentor().instrument(tracer_provider)`
+   * as an aside - agentic framework instrumentation with `CrewAIInstrumentor` works best in Phoenix when instantiated along with `LangChainInstrumentor` and the instrumentor of the LLM provider, e.g. `OpenAIInstrumentor`
+   ```python
+   from openinference.instrumentation.crewai import CrewAIInstrumentor
+   from openinference.instrumentation.langchain import LangChainInstrumentor
+   from openinference.instrumentation.openai import OpenAIInstrumentor
+   ...
+   CrewAIInstrumentor().instrument(tracer_provider)
+   LangChainInstrumentor().instrument(tracer_provider)
+   OpenAIInstrumentor().instrument(tracer_provider)
+   ```
+9. Update/add environment variables you want to keep and retrieve from the `.env` file - like api keys or configuration parameters
 
