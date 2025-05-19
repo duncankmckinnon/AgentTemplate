@@ -4,9 +4,8 @@ This template provides infrastructure and demo serving with a web interface for 
 
 ## Prerequisites
 
-- Docker and Docker Compose installed
-- Python 3.9 or higher
-- OpenAI API key credentials (or whichever framework you prefer)
+- Docker, python3, and pyenv installed
+- API key credentials (OpenAI or whichever provider/framework you prefer)
 - Environment variables configured (see Configuration section)
 
 ## Quick Start
