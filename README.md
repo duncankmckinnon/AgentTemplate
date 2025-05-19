@@ -32,15 +32,15 @@ The agent is configured to use OpenAI. This is controlled through environment va
 OPENAI_API_KEY="your-openai-api-key"
 OPENAI_MODEL="gpt-4"
 OPENAI_TEMPERATURE=0.2
-FASTAPI_URL=http://fastapi:8000
+FASTAPI_URL="http://fastapi:8000"
 PHOENIX_COLLECTOR_ENDPOINT="http://phoenix:6006/v1/traces"
 ```
 
 ## Demo Interface
 
 Once running, the demo will be available at:
-- Demo Interface: localhost:8080
-- Phoenix Dashboard: localhost:6006
+- Demo Interface: [localhost:8080](http://127.0.0.1:8080)
+- Phoenix Dashboard: [localhost:6006](http://127.0.0.1:6006)
 
 The interface allows you to:
 - Send messages to the bot
