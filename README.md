@@ -11,16 +11,18 @@ This template provides infrastructure and demo serving with a web interface for 
 
 ## Quick Start
 
-1. Clone the repository
-2. Set up your environment variables in `.env`
-3. Run the demo server from the project root:
+1. Create your project repo using the template and clone in locally
+2. Set your environment variables in the directory in a new `.env` file
+3. Create the local `.venv` for the repository by running ```./bin/bootstrap.sh```
+   - follow any instructions to install python3 and python3-venv if necessary
+   - when the script completes, activate the environment with `source .venv/bin/activate` (on Mac, pc is slightly different)
+   - Re-run the script to install any new packages added to requirements
+4. Make sure [docker](https://docs.docker.com/get-started/get-docker/) is running on your laptop in the background.
+5. Run the demo server from the project root with ```./bin/run_agent.sh --build```
+
+To re-run the containers without building:
 ```bash
 ./bin/run_agent.sh
-```
-
-To rebuild the containers:
-```bash
-./bin/run_agent.sh --build
 ```
 
 ## Configuration
