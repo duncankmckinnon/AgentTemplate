@@ -72,7 +72,7 @@ The interface allows you to:
 The demo logic is located in [agent/demo_code/demo_server.py](https://github.com/duncankmckinnon/AgentTemplate/tree/main/agent/demo_code). This contains all the logic for interactive chat demos.
 Key components:
 
-- `demo_server.py`: Main Flask application that calls the rest API
+- `demo_server.py`: Main Flask application (calls the REST API to avoid duplicate logic)
 - `templates/index.html`: Web interface for chat
 - `static/`: CSS and JavaScript files for running the chat interface
 
