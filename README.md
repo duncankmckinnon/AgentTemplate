@@ -39,8 +39,8 @@ PHOENIX_COLLECTOR_ENDPOINT="http://phoenix:6006/v1/traces"
 ## Demo Interface
 
 Once running, the demo will be available at:
-- Demo Interface: http://127.0.0.1:8080
-- Phoenix Dashboard: http://127.0.0.1:6006
+- Demo Interface: localhost:8080
+- Phoenix Dashboard: localhost:6006
 
 The interface allows you to:
 - Send messages to the bot
